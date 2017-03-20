@@ -79,13 +79,20 @@ class ListTableVC: UITableViewController,URLSessionDelegate, URLSessionTaskDeleg
                             }
                         }
                     }
-                    self.tableView.reloadData()
+                    self.performUIUpdatesOnMain {
+                        self.tableView.reloadData()
+                    }
+                    
                 } //end if let json
             }
         })
         backgroundTask.resume()
     }
-    
+    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            updates()
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
